@@ -1,6 +1,6 @@
 # Tryton
 
-A new Flutter project.
+An application for tryton.vlo.gda.pl
 
 ## Getting Started
 
