@@ -56,19 +56,20 @@ class _MainPageContentState extends State<MainPageContent> {
         title: Text("Tryton"),
       ),
       endDrawer: Drawer(
-        child: Column(
+        child: SafeArea(
+            child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text("Logged in as ${this.widget.client.username}"),
             RaisedButton(
               onPressed: () async {
                 await SftpApi.resetProfile();
-                Navigator.of(context).popAndPushNamed("/");
+                Navigator.of(context).pushReplacementNamed("/");
               },
               child: Text("Log out"),
             )
           ],
-        ),
+        )),
       ),
       body: FutureBuilder<List>(
         future: this.widget.client.ls(),
