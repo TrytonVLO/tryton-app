@@ -5,12 +5,14 @@ import 'package:Tryton/apis/sftpApi.dart';
 
 Future<SftpApi> getSftpApi(BuildContext context) async {
   SftpApi client = await SftpApi.loadProfile();
+  int result = await client.login();
 
-  while (client == null) {
+  while (client == null || result > 0) {
     await Navigator.of(context).pushNamed("/login");
     client = await SftpApi.loadProfile();
+    result = await client.login();
   }
-
+  
   return client;
 }
 

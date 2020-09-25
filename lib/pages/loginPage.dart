@@ -102,7 +102,7 @@ class _LoginFormState extends State<LoginForm> {
                           SftpApi sftpApi = SftpApi(
                               username: this.username, password: this.password);
 
-                          int loginResult = await sftpApi.canLogin();
+                          int loginResult = await sftpApi.login();
                           if (loginResult == 1) {
                             // wrong password
                             setState(() {
