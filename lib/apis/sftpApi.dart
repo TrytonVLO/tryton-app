@@ -16,6 +16,8 @@ class SftpApi {
       username: this.username,
       passwordOrKey: this.password,
     );
+
+    //print("New instance: ${this.username} : ${this.password}");  // debug
   }
 
   Future<int> canLogin() async {
@@ -41,6 +43,7 @@ class SftpApi {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('username', this.username);
     await prefs.setString('password', this.password);
+    //print("Saved: ${this.username} : ${this.password}");  // debug
   }
 
   static Future<SftpApi> loadProfile() async {
@@ -52,11 +55,14 @@ class SftpApi {
     try {
       username = prefs.getString('username');
       password = prefs.getString('password');
+      //print("Loading data: $username : $password"); // debug
     } catch (e) {
+      print("Loading error: $e"); // debug
       return null;
     }
     if (username.isEmpty || password.isEmpty) return null;
 
+    //print("Loaded: $username : $password");  // debug
     return SftpApi(username: username, password: password);
   }
 }
