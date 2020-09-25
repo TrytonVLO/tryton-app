@@ -7,10 +7,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final String initialRoute;
-
-  MyApp({this.initialRoute="/home"});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,7 +24,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: this.initialRoute,
+      initialRoute: '/home',
       routes: {
         '/login': (context) => LoginPage(),
         '/home': (context) => MainPage(),

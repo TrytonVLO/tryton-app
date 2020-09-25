@@ -63,12 +63,12 @@ class SftpApi {
     // 1 when login or password are wrong
     // 2 when something else went wrong
     try {
-      print("connecting...");
+      //print("connecting...");
       String result = await this.ftpConnect.connect();
       if (result != "session_connected") return 2;
       result = await this.ftpConnect.connectSFTP();
       if (result != "sftp_connected") return 2;
-      print("done");
+      //print("done");
       return 0;
     } catch (e) {
       print(e.message);
@@ -77,12 +77,22 @@ class SftpApi {
     }
   }
 
+  // ----- navigation -----
+
   Future<List> ls({String path = ""}) async {
     if (path.isEmpty) path = this.currentPath;
     return this.ftpConnect.sftpLs(path);
   }
 
   void cd(String dir) {
+    if (dir == "..") {
+      this.currentPath =
+          this.currentPath.substring(0, this.currentPath.lastIndexOf("/"));
+      return;
+    }
     this.currentPath += "/" + dir;
   }
+
+  // ----- deletion -----
+  // TODO
 }

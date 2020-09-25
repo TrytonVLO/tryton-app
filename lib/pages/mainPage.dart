@@ -54,8 +54,20 @@ class _MainPageContentState extends State<MainPageContent> {
       appBar: AppBar(
         title: Text("Tryton"),
       ),
-      body: Center(
-        child: Text("You are logged in as ${this.widget.client.username}"),
+      body: FutureBuilder<List>(
+        future: this.widget.client.ls(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            // loading screen
+            return Center(
+                child: SpinKitCubeGrid(
+                  color: Colors.blue,
+                  size: 50.0,
+                ),
+            );
+          
+          return Text(snapshot.data.map((e) => e['filename']).join('\n'));
+        },
       ),
     );
   }
