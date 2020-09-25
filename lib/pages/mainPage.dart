@@ -5,14 +5,15 @@ import 'package:Tryton/apis/sftpApi.dart';
 
 Future<SftpApi> getSftpApi(BuildContext context) async {
   SftpApi client = await SftpApi.loadProfile();
-  int result = await client.login();
+  int result;
+  if (client != null) result = await client.login();
 
   while (client == null || result > 0) {
     await Navigator.of(context).pushNamed("/login");
     client = await SftpApi.loadProfile();
-    result = await client.login();
+    if (client != null) result = await client.login();
   }
-  
+
   return client;
 }
 
@@ -54,18 +55,33 @@ class _MainPageContentState extends State<MainPageContent> {
       appBar: AppBar(
         title: Text("Tryton"),
       ),
+      endDrawer: Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text("Logged in as ${this.widget.client.username}"),
+            RaisedButton(
+              onPressed: () async {
+                await SftpApi.resetProfile();
+                Navigator.of(context).popAndPushNamed("/");
+              },
+              child: Text("Log out"),
+            )
+          ],
+        ),
+      ),
       body: FutureBuilder<List>(
         future: this.widget.client.ls(),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
             // loading screen
             return Center(
-                child: SpinKitCubeGrid(
-                  color: Colors.blue,
-                  size: 50.0,
-                ),
+              child: SpinKitCubeGrid(
+                color: Colors.blue,
+                size: 50.0,
+              ),
             );
-          
+          // TODO: add real file explorer
           return Text(snapshot.data.map((e) => e['filename']).join('\n'));
         },
       ),

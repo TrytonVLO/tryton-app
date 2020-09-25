@@ -121,7 +121,7 @@ class _LoginFormState extends State<LoginForm> {
                           }
 
                           await sftpApi.saveProfile();  // save good credentials
-                          Navigator.of(context).popAndPushNamed("/home"); // go back home
+                          Navigator.of(context).popAndPushNamed("/"); // go back home
                         }
                       },
                       child: Text("Login"),
