@@ -9,7 +9,7 @@ void main() async {
 }
 
 Future<bool> isLoggedIn() async {
-  SftpApi profile = await SftpApi.loadProfile();
+  SftpApi profile = null;//await SftpApi.loadProfile();
 
   if(profile == null)
     return false;
