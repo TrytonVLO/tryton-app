@@ -30,6 +30,7 @@ class _SftpExplorerState extends State<SftpExplorer> {
 
           return true;
         },
+        
         child: Column(
           children: [
             Container(

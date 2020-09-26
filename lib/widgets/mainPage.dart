@@ -113,6 +113,40 @@ class _MainPageContentState extends State<MainPageContent> {
                     style: TextStyle(color: Colors.red[400]),
                   ),
                   onTap: () async {
+
+                    // confirm logout
+                    bool confirmLogout = false;
+
+                    await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text("Log out?"),
+                        content: Text("Are you shure you want to log out?"),
+                        actions: [
+                          FlatButton(
+                            child: Text(
+                              "Yes",
+                              style: TextStyle(color: Colors.red[400]),
+                            ),
+                            onPressed: () {
+                              confirmLogout = true;
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          FlatButton(
+                            child: Text("Cancel"),
+                            onPressed: () {
+                              confirmLogout = false;
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (!confirmLogout) return;
+
+                    // log out
                     await SftpApi.resetProfile();
                     Navigator.of(context).pushReplacementNamed("/");
                   },
@@ -121,15 +155,17 @@ class _MainPageContentState extends State<MainPageContent> {
             )),
           )),
       body: WillPopScope(
-        onWillPop: () async {
-          if(_key.currentState.isDrawerOpen){
-            Navigator.of(context).pop();
-            return false;
-          }
-          return true;
-        },
-        child: SftpExplorer(client: this.widget.client,)
-      ),
+          // close drawer via back button
+          onWillPop: () async {
+            if (_key.currentState.isDrawerOpen) {
+              Navigator.of(context).pop();
+              return false;
+            }
+            return true;
+          },
+          child: SftpExplorer(
+            client: this.widget.client,
+          )),
     );
   }
 }
