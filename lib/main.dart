@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:Tryton/pages/mainPage.dart';
-import 'package:Tryton/pages/loginPage.dart';
+import 'package:Tryton/widgets/mainPage.dart';
+import 'package:Tryton/widgets/loginPage.dart';
 
 void main() async {
   runApp(MyApp());

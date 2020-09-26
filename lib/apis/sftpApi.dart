@@ -93,6 +93,6 @@ class SftpApi {
     this.currentPath += "/" + dir;
   }
 
-  // ----- deletion -----
+  // ----- updates to file structure -----
   // TODO
 }
