@@ -56,7 +56,6 @@ class SftpApi {
   }
 
   // --------------- Operations on sftp ---------------
-  String currentPath = ".";
 
   Future<int> login() async {
     // returns 0 when login succeded
@@ -78,10 +77,27 @@ class SftpApi {
   }
 
   // ----- navigation -----
+  String currentPath = ".";
+  dynamic parentDir = {
+    "filename": "..",
+    "isDirectory": true,
+    "permissions": "",
+  };
 
   Future<List> ls({String path = ""}) async {
     if (path.isEmpty) path = this.currentPath;
-    return this.ftpConnect.sftpLs(path);
+    List<dynamic> files;
+
+    try {
+      files = await this.ftpConnect.sftpLs(path);
+    } catch (e) {
+      print("sftp ls error: $e");
+    }
+
+    // add parent directory
+    if (currentPath != ".") files = [parentDir] + files;
+
+    return files;
   }
 
   void cd(String dir) {
