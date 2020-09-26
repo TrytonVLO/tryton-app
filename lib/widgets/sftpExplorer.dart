@@ -22,12 +22,13 @@ class _SftpExplorerState extends State<SftpExplorer> {
     return WillPopScope(
         // go back in file structure via back button
         onWillPop: () async {
-          if (this.widget.client.currentPath != ".") {
+          if (this.widget.client.currentPath != "."){
             this.widget.client.cd("..");
             refresh();
+            return false;
           }
 
-          return false;
+          return true;
         },
         child: Column(
           children: [

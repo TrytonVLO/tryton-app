@@ -50,9 +50,12 @@ class MainPageContent extends StatefulWidget {
 }
 
 class _MainPageContentState extends State<MainPageContent> {
+  GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       appBar: AppBar(
         title: Text("Tryton"),
       ),
@@ -117,7 +120,16 @@ class _MainPageContentState extends State<MainPageContent> {
               ],
             )),
           )),
-      body: SftpExplorer(client: this.widget.client,),
+      body: WillPopScope(
+        onWillPop: () async {
+          if(_key.currentState.isDrawerOpen){
+            Navigator.of(context).pop();
+            return false;
+          }
+          return true;
+        },
+        child: SftpExplorer(client: this.widget.client,)
+      ),
     );
   }
 }
