@@ -28,6 +28,7 @@ dependencies:
   ssh: ^0.0.7
   qrscan: ^0.2.17
   permission_handler: ^5.0.1+1
+  connectivity_widget: ^0.1.7
 
 
   # The following adds the Cupertino Icons font to your application.

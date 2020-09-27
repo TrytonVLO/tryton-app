@@ -5,11 +5,20 @@ import 'package:Tryton/widgets/sftpExplorer.dart';
 import 'package:Tryton/apis/sftpApi.dart';
 
 Future<SftpApi> getSftpApi(BuildContext context) async {
+  print("started!");
   SftpApi client = await SftpApi.loadProfile();
   int result;
   if (client != null) result = await client.login();
 
-  while (client == null || result > 0) {
+  if(result == 2 || !await SftpApi.isConnected()){
+    // show no internet error
+    print("No internet!");
+    Navigator.of(context).pushReplacementNamed("/noInternet");
+    return null;
+  }
+
+  while (client == null || result == 1) {
+    print("login");
     await Navigator.of(context).pushNamed("/login");
     client = await SftpApi.loadProfile();
     if (client != null) result = await client.login();
@@ -121,7 +130,7 @@ class _MainPageContentState extends State<MainPageContent> {
                       context: context,
                       builder: (context) => AlertDialog(
                         title: Text("Log out?"),
-                        content: Text("Are you shure you want to log out?"),
+                        content: Text("Are you sure you want to log out?"),
                         actions: [
                           FlatButton(
                             child: Text(

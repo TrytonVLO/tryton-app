@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:Tryton/widgets/mainPage.dart';
 import 'package:Tryton/widgets/loginPage.dart';
+import 'package:Tryton/widgets/noInternetPage.dart';
 
 void main() async {
   runApp(MyApp());
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => MainPage(),
         '/login': (context) => LoginPage(),
+        '/noInternet': (context) => NoInternetPage(),
       },
     );
   }

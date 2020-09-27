@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:ssh/ssh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity_widget/connectivity_widget.dart';
 
 class SftpApi {
-  final String hostname = "tryton.vlo.gda.pl";
+  static String hostname = "tryton.vlo.gda.pl";
 
   String username;
   String password;
@@ -11,7 +12,7 @@ class SftpApi {
 
   SftpApi({@required this.username, @required this.password}) {
     this.ftpConnect = SSHClient(
-      host: this.hostname,
+      host: hostname,
       port: 22,
       username: this.username,
       passwordOrKey: this.password,
@@ -39,11 +40,11 @@ class SftpApi {
       username = prefs.getString('username');
       password = prefs.getString('password');
       //print("Loading data: $username : $password"); // debug
+      if (username.isEmpty || password.isEmpty) return null;
     } catch (e) {
       print("Loading error: $e"); // debug
       return null;
     }
-    if (username.isEmpty || password.isEmpty) return null;
 
     //print("Loaded: $username : $password");  // debug
     return SftpApi(username: username, password: password);
@@ -53,6 +54,15 @@ class SftpApi {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('username', "");
     await prefs.setString('password', "");
+  }
+
+  // --------------- Operations on server ---------------
+
+  static Future<bool> isConnected() {
+    ConnectivityUtils.instance.setCallback((response) => response.contains("<!DOCTYPE html>"));
+    ConnectivityUtils.instance.setServerToPing("https://$hostname");
+
+    return ConnectivityUtils.instance.isPhoneConnected();
   }
 
   // --------------- Operations on sftp ---------------
@@ -70,7 +80,7 @@ class SftpApi {
       //print("done");
       return 0;
     } catch (e) {
-      print(e.message);
+      print("sftp login: ${e.message}; ${e.code}");
       if (e.message == "Auth fail") return 1;
       return 2;
     }
@@ -85,13 +95,26 @@ class SftpApi {
   };
 
   Future<List> ls({String path = ""}) async {
+    List res = await this._ls(path: path);
+    if(res.length == 1 && res[0] == "error"){
+      int r = await this.login();
+      if(r == 2){
+        return ["error",];
+      }
+      res = await this._ls(path: path);
+    }
+    return res;
+  }
+
+  Future<List> _ls({String path = ""}) async {
     if (path.isEmpty) path = this.currentPath;
     List<dynamic> files;
 
     try {
       files = await this.ftpConnect.sftpLs(path);
     } catch (e) {
-      print("sftp ls error: $e");
+      print("sftp ls: $e");
+      return ["error",];
     }
 
     // add parent directory

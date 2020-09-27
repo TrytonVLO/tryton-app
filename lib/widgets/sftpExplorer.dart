@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:Tryton/apis/sftpApi.dart';
+import 'package:Tryton/widgets/noInternetPage.dart';
 
 class SftpExplorer extends StatefulWidget {
   final SftpApi client;
@@ -22,7 +23,7 @@ class _SftpExplorerState extends State<SftpExplorer> {
     return WillPopScope(
         // go back in file structure via back button
         onWillPop: () async {
-          if (this.widget.client.currentPath != "."){
+          if (this.widget.client.currentPath != ".") {
             this.widget.client.cd("..");
             refresh();
             return false;
@@ -30,7 +31,6 @@ class _SftpExplorerState extends State<SftpExplorer> {
 
           return true;
         },
-        
         child: Column(
           children: [
             Container(
@@ -39,29 +39,33 @@ class _SftpExplorerState extends State<SftpExplorer> {
               color: Colors.grey[800],
             ),
             Expanded(
-              child: FutureBuilder<List>(
-                future: this.widget.client.ls(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData)
-                    // loading screen
-                    return Center(
-                      child: SpinKitCubeGrid(
-                        color: Colors.blue,
-                        size: 50.0,
-                      ),
-                    );
-                  return ListView(
-                    children: snapshot.data
-                        .map<Widget>((e) => FileTile(
-                              filedata: e,
-                              client: this.widget.client,
-                              refresh: refresh,
-                            ))
-                        .toList(),
+                child: FutureBuilder<List>(
+              future: this.widget.client.ls(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done)
+                  // loading screen
+                  return Center(
+                    child: SpinKitCubeGrid(
+                      color: Colors.blue,
+                      size: 50.0,
+                    ),
                   );
-                },
-              )
-            ),
+                if (snapshot.data.length == 1 && snapshot.data[0] == "error")
+                  // no internet
+                  return NoInternetMessage(
+                    tryAgain: () => this.setState(() {}),
+                  );
+                return ListView(
+                  children: snapshot.data
+                      .map<Widget>((e) => FileTile(
+                            filedata: e,
+                            client: this.widget.client,
+                            refresh: refresh,
+                          ))
+                      .toList(),
+                );
+              },
+            )),
           ],
         ));
   }

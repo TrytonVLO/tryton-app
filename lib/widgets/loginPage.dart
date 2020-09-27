@@ -116,7 +116,7 @@ class _LoginFormState extends State<LoginForm> {
                           if (loginResult > 1) {
                             // some unknown error
                             setState(() {
-                              this.errorMessage = "Something went wrong :/";
+                              this.errorMessage = "Check your internet connection";
                               this.loggingIn = false;
                             });
                             return;
