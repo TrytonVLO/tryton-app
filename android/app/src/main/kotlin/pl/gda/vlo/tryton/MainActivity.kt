@@ -1,4 +1,4 @@
-package com.example.Tryton
+package pl.gda.vlo.tryton
 
 import io.flutter.embedding.android.FlutterActivity
 

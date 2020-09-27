@@ -58,11 +58,16 @@ class SftpApi {
 
   // --------------- Operations on server ---------------
 
-  static Future<bool> isConnected() {
-    ConnectivityUtils.instance.setCallback((response) => response.contains("<!DOCTYPE html>"));
+  static Future<bool> isConnected() async {
+    ConnectivityUtils.instance
+        .setCallback((response) => response.contains("<!DOCTYPE html>"));
     ConnectivityUtils.instance.setServerToPing("https://$hostname");
 
-    return ConnectivityUtils.instance.isPhoneConnected();
+    try {
+      return ConnectivityUtils.instance.isPhoneConnected();
+    } catch (e) {
+      return false;
+    }
   }
 
   // --------------- Operations on sftp ---------------
@@ -96,10 +101,12 @@ class SftpApi {
 
   Future<List> ls({String path = ""}) async {
     List res = await this._ls(path: path);
-    if(res.length == 1 && res[0] == "error"){
+    if (res.length == 1 && res[0] == "error") {
       int r = await this.login();
-      if(r == 2){
-        return ["error",];
+      if (r == 2) {
+        return [
+          "error",
+        ];
       }
       res = await this._ls(path: path);
     }
@@ -114,7 +121,9 @@ class SftpApi {
       files = await this.ftpConnect.sftpLs(path);
     } catch (e) {
       print("sftp ls: $e");
-      return ["error",];
+      return [
+        "error",
+      ];
     }
 
     // add parent directory

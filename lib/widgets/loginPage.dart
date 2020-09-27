@@ -3,15 +3,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:Tryton/apis/sftpApi.dart';
 
-
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: () async => false,
-        child: Scaffold(
-          body: LoginForm(),
-        ));
+    return Scaffold(
+      body: LoginForm(),
+    );
   }
 }
 
@@ -116,13 +113,14 @@ class _LoginFormState extends State<LoginForm> {
                           if (loginResult > 1) {
                             // some unknown error
                             setState(() {
-                              this.errorMessage = "Check your internet connection";
+                              this.errorMessage =
+                                  "Check your internet connection";
                               this.loggingIn = false;
                             });
                             return;
                           }
 
-                          await sftpApi.saveProfile();  // save good credentials
+                          await sftpApi.saveProfile(); // save good credentials
                           Navigator.of(context).pop(); // go back home
                         }
                       },
