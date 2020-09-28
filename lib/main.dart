@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:Tryton/widgets/mainPage.dart';
-import 'package:Tryton/widgets/loginPage.dart';
-import 'package:Tryton/widgets/noInternetPage.dart';
+
+import 'package:Tryton/widgets/main_page.dart';
+import 'package:Tryton/widgets/login_page.dart';
+import 'package:Tryton/widgets/no_internet_page.dart';
 
 void main() async {
   runApp(MyApp());

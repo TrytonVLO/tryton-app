@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'package:Tryton/apis/sftpApi.dart';
+import 'package:Tryton/apis/sftp_api.dart';
 
 class LoginPage extends StatelessWidget {
   @override

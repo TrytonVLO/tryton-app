@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'package:Tryton/apis/sftpApi.dart';
-import 'package:Tryton/widgets/noInternetPage.dart';
+import 'package:Tryton/apis/sftp_api.dart';
+import 'package:Tryton/widgets/no_internet_page.dart';
 
 class SftpExplorer extends StatefulWidget {
   final SftpApi client;
